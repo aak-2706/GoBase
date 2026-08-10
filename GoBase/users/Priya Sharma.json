@@ -1,0 +1,12 @@
+{
+	"Name": "Priya Sharma",
+	"Age": 24,
+	"Contact": "9876543218",
+	"Company": "TCS",
+	"Address": {
+		"City": "Hyderabad",
+		"State": "Telangana",
+		"Country": "India",
+		"Pincode": 500081
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"Name": "Arjun Mehta",
+	"Age": 29,
+	"Contact": "9876543215",
+	"Company": "Flipkart",
+	"Address": {
+		"City": "Bengaluru",
+		"State": "Karnataka",
+		"Country": "India",
+		"Pincode": 560078
+	}
+}

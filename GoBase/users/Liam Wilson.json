@@ -1,0 +1,12 @@
+{
+	"Name": "Liam Wilson",
+	"Age": 30,
+	"Contact": "9876543219",
+	"Company": "Netflix",
+	"Address": {
+		"City": "Los Gatos",
+		"State": "California",
+		"Country": "USA",
+		"Pincode": 95032
+	}
+}

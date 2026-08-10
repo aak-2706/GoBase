@@ -1,0 +1,12 @@
+{
+	"Name": "Emma Johnson",
+	"Age": 25,
+	"Contact": "9876543212",
+	"Company": "Microsoft",
+	"Address": {
+		"City": "Redmond",
+		"State": "Washington",
+		"Country": "USA",
+		"Pincode": 98052
+	}
+}

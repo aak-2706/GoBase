@@ -1,0 +1,12 @@
+{
+	"Name": "Aman Anilkumar",
+	"Age": 20,
+	"Contact": "9876543210",
+	"Company": "QuantaDB",
+	"Address": {
+		"City": "Bengaluru",
+		"State": "Karnataka",
+		"Country": "India",
+		"Pincode": 560001
+	}
+}

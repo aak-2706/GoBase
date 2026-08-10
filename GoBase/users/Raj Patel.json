@@ -1,0 +1,12 @@
+{
+	"Name": "Raj Patel",
+	"Age": 31,
+	"Contact": "9876543213",
+	"Company": "Infosys",
+	"Address": {
+		"City": "Pune",
+		"State": "Maharashtra",
+		"Country": "India",
+		"Pincode": 411001
+	}
+}

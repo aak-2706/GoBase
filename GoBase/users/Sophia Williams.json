@@ -1,0 +1,12 @@
+{
+	"Name": "Sophia Williams",
+	"Age": 27,
+	"Contact": "9876543214",
+	"Company": "Amazon",
+	"Address": {
+		"City": "Seattle",
+		"State": "Washington",
+		"Country": "USA",
+		"Pincode": 98101
+	}
+}

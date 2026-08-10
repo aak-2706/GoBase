@@ -1,0 +1,12 @@
+{
+	"Name": "Olivia Brown",
+	"Age": 26,
+	"Contact": "9876543216",
+	"Company": "Apple",
+	"Address": {
+		"City": "Cupertino",
+		"State": "California",
+		"Country": "USA",
+		"Pincode": 95014
+	}
+}

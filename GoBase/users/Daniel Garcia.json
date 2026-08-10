@@ -1,0 +1,12 @@
+{
+	"Name": "Daniel Garcia",
+	"Age": 34,
+	"Contact": "9876543217",
+	"Company": "Meta",
+	"Address": {
+		"City": "Menlo Park",
+		"State": "California",
+		"Country": "USA",
+		"Pincode": 94025
+	}
+}
