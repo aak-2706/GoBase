@@ -8,23 +8,23 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/jcelliott/lumber"
+	"github.com/jcelliott/lumber" //-> actually creates the logger
 )
 
 const version = "1.0.1"
 
 type (
-	Logger interface { //
-		Fatal(string, ...interface{})
+	Logger interface { // It is an interface
+		Fatal(string, ...interface{}) // methods - string input, accpet any no. of additional inputs of any type; logger.Debug("User %s is %d years old", "Aman", 20)
 		Error(string, ...interface{})
 		Warn(string, ...interface{})
 		Info(string, ...interface{})
 		Debug(string, ...interface{})
 		Trace(string, ...interface{})
 	}
-	Driver struct {
-		mutex   sync.Mutex
-		mutexes map[string]*sync.Mutex //
+	Driver struct { // main object that maintains database
+		mutex   sync.Mutex             // a single mutex, protects mutex map
+		mutexes map[string]*sync.Mutex // locks for different collections(eg. users)
 		dir     string
 		log     Logger
 	}
@@ -66,7 +66,7 @@ func (d *Driver) Write(collection, resource string, v interface{}) error {
 	mutex := d.getOrCreateMutex(collection)
 	mutex.Lock()
 	defer mutex.Unlock()
-	dir := filepath.Join(d.dir, collection)
+	dir := filepath.Join(d.dir, collection) // creates users in this directory
 	fnlPath := filepath.Join(dir, resource+".json")
 	tempPath := fnlPath + ".tmp"
 	if err := os.MkdirAll(dir, 0755); err != nil {
@@ -172,7 +172,7 @@ type User struct {
 }
 
 func main() {
-	dir := "./"
+	dir := "./" // using current directory as database directory
 	db, err := New(dir, nil)
 	if err != nil {
 		fmt.Println("Error:", err)
