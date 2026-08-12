@@ -24,7 +24,7 @@ type (
 	}
 	Driver struct { // main object that maintains database
 		mutex   sync.Mutex             // a single mutex, protects mutex map
-		mutexes map[string]*sync.Mutex // locks for different collections(eg. users)
+		mutexes map[string]*sync.Mutex // locks for different collections(eg. users,orders, etc.)
 		dir     string
 		log     Logger
 	}
@@ -38,25 +38,25 @@ func New(dir string, options *Options) (*Driver, error) {
 	dir = filepath.Clean(dir) //
 	opts := Options{}
 	if options != nil {
-		opts = *options
+		opts = *options // Use user's already existing logger
 	}
 	if opts.Logger == nil {
-		opts.Logger = lumber.NewConsoleLogger((lumber.INFO)) //
+		opts.Logger = lumber.NewConsoleLogger((lumber.INFO)) // Default Logger
 	}
 	driver := Driver{
 		dir:     dir,
 		mutexes: make(map[string]*sync.Mutex),
 		log:     opts.Logger,
 	}
-	if _, err := os.Stat(dir); err != nil {
+	if _, err := os.Stat(dir); err != nil { // checks if the directory exists
 		opts.Logger.Debug("Using '%s' (database already exists)\n", dir) //
 		return &driver, nil
 	}
 	opts.Logger.Debug("Creating the databse at '%s'...\n", dir)
-	return &driver, os.MkdirAll(dir, 0755)
+	return &driver, os.MkdirAll(dir, 0755) // 0755 -> permission to make the directory
 }
 
-func (d *Driver) Write(collection, resource string, v interface{}) error {
+func (d *Driver) Write(collection, resource string, v interface{}) error { // resource -> particular record/document(eg. Aman Anilkumar, Arjun Mehta) -> Basically resource is an identifier on what to call the object about to be stored; v-> value i am going to be storing in the resource is going to be of any type
 	if collection == "" {
 		return fmt.Errorf("Missing Collection - no place to save record!")
 	}
@@ -66,13 +66,13 @@ func (d *Driver) Write(collection, resource string, v interface{}) error {
 	mutex := d.getOrCreateMutex(collection)
 	mutex.Lock()
 	defer mutex.Unlock()
-	dir := filepath.Join(d.dir, collection) // creates users in this directory
-	fnlPath := filepath.Join(dir, resource+".json")
-	tempPath := fnlPath + ".tmp"
+	dir := filepath.Join(d.dir, collection)         // creates users in this directory
+	fnlPath := filepath.Join(dir, resource+".json") // creates the json files with the name same as 'resource' given as parameter
+	tempPath := fnlPath + ".tmp"                    // better approach, since updation of the file might cause crashes
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return err
 	}
-	b, err := json.MarshalIndent(v, "", "\t")
+	b, err := json.MarshalIndent(v, "", "\t") // converts the object to json type
 	if err != nil {
 		return err
 	}
@@ -80,7 +80,7 @@ func (d *Driver) Write(collection, resource string, v interface{}) error {
 	if err := ioutil.WriteFile(tempPath, b, 0644); err != nil {
 		return err
 	}
-	return os.Rename(tempPath, fnlPath)
+	return os.Rename(tempPath, fnlPath) // renaming .tmp file to .json file
 }
 
 func (d *Driver) Read(collection, resource string, v interface{}) error {
@@ -98,7 +98,7 @@ func (d *Driver) Read(collection, resource string, v interface{}) error {
 	if err != nil {
 		return err
 	}
-	return json.Unmarshal(b, &v)
+	return json.Unmarshal(b, &v) // converts JSON value to Go struct
 }
 
 func (d *Driver) ReadAll(collection string) ([]string, error) {
@@ -130,9 +130,9 @@ func (d *Driver) Delete(collection, resource string) error {
 	switch fi, err := stat(dir); {
 	case fi == nil, err != nil:
 		fmt.Errorf("unable to find file or directory named %v\n", path)
-	case fi.Mode().IsDir():
+	case fi.Mode().IsDir(): // deletes the directory
 		return os.RemoveAll(dir)
-	case fi.Mode().IsRegular():
+	case fi.Mode().IsRegular(): // deletes the file
 		return os.RemoveAll(dir + ".json")
 	}
 	return nil
@@ -141,15 +141,15 @@ func (d *Driver) Delete(collection, resource string) error {
 func (d *Driver) getOrCreateMutex(collection string) *sync.Mutex {
 	d.mutex.Lock()
 	defer d.mutex.Unlock()
-	m, ok := d.mutexes[collection]
+	m, ok := d.mutexes[collection] // checks if the collection already has a lock(mutex) or not
 	if !ok {
-		m = &sync.Mutex{}
-		d.mutexes[collection] = m
+		m = &sync.Mutex{}         // creates mutex
+		d.mutexes[collection] = m // assigns created mutex to the collection
 	}
 	return m
 }
 
-func stat(path string) (fi os.FileInfo, err error) {
+func stat(path string) (fi os.FileInfo, err error) { // checks if file exists
 	if fi, err = os.Stat(path); os.IsNotExist(err) {
 		fi, err = os.Stat(path + ".json")
 	}
